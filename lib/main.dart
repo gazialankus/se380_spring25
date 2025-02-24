@@ -25,17 +25,25 @@ class Employee extends Person {
 }
 
 class MyAppInClass extends StatelessWidget {
-  const MyAppInClass({super.key});
+  MyAppInClass({super.key});
 
+  String name = 'ali';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Column(
+        children: [
+          Center(child: Text(name)),
+          ElevatedButton(onPressed: () {
+            name = 'mohammad';
+          }, child: Text('change name')),
+        ],
+      ),
     );
   }
 }
