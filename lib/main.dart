@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   f();
-  runApp(new MyApp());
+  runApp(new MyAppInClass());
 }
 
 void f() {
@@ -18,8 +18,8 @@ class Employee extends Person {
   String? jobTitle;
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyAppInClass extends StatelessWidget {
+  const MyAppInClass({super.key});
 
   // This widget is the root of your application.
   @override
