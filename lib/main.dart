@@ -8,12 +8,18 @@ void main() {
 void f() {
   print('another function');
   Employee e = Employee();
+  Person p = e;
+  setNameToJack(p);
+}
+
+void setNameToJack(Person e) {
   e.name = "Jack";
 }
 
 class Person {
   String? name;
 }
+
 class Employee extends Person {
   String? jobTitle;
 }
