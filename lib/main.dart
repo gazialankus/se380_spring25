@@ -25,9 +25,8 @@ class Employee extends Person {
 }
 
 class MyAppInClass extends StatelessWidget {
-  MyAppInClass({super.key});
+  const MyAppInClass({super.key});
 
-  String name = 'ali';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,14 +35,7 @@ class MyAppInClass extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
-      home: Column(
-        children: [
-          Center(child: Text(name)),
-          ElevatedButton(onPressed: () {
-            name = 'mohammad';
-          }, child: Text('change name')),
-        ],
-      ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -59,11 +51,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String name = 'ali';
 
   void _incrementCounter() {
     doStupidStuff();
     setState(() {
       _counter++;
+      name = 'mohammad';
     });
   }
 
@@ -80,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('build is called');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -90,10 +85,14 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'PUSH PUSH PUSH',
+              'PUSH PUSH PUSH oaueuaeo',
             ),
             Text(
               '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            Text(
+              name,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
