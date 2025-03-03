@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  f();
+  f(8, j: 5, i: 5, l: 8);
   runApp(new MyAppInClass());
 }
 
-void f() {
-  print('another function');
+void f(int count, {required int i, int? j, int k = 5, int? l}) {
+  print('another function called with $i');
   Employee e = Employee();
   Person p = e;
   setNameToJack(p);
