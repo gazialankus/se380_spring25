@@ -22,7 +22,7 @@ void main() {
   final isIncluded = 1 == 2;
   final lsub = [11, 12, 13];
 
-  final l = [
+  final List<num> l = [
     1,
     if (isIncluded) ...lsub else ...[4, 5],
     for (int i = 0; i < 5; ++i)
@@ -32,8 +32,21 @@ void main() {
     if (isIncluded) 4.8 else ...[0, 5],
     5,
   ];
+  for (final li in l) {
+    print(li);
+  }
+  for (var i = 0; i < l.length; ++i) {
+    print(l[i]);
+  }
+  //(i) {return '$i';}
+  final lo = l.map((i) => i*2).toList();
+
+  final lo1 = l.where((i) => i % 2 == 0).map((e) => e*2);
 
   print(l);
+  print('l after where:');
+  print(lo);
+  print(lo1);
 
   runApp(new MyAppInClass());
 }
@@ -88,15 +101,19 @@ class MyAppInClass extends StatelessWidget {
         useMaterial3: true,
       ),
       title: 'Flutter Demo',
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(
+        title: 'Flutter Demo Home Page',
+        people: ['ali', 'veli', 'ahmet'],
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.people});
 
   final String title;
+  final List<String> people;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -104,8 +121,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  String name = 'ali';
+  late List<String> people;
 
+  @override
+  void initState() {
+    super.initState();
+    people = widget.people;
+  }
   void _incrementCounter() {
     void printSomething() {
       print('something');
@@ -120,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     print('other stuff');
     setState(() {
-      name = 'mohammad';
+      people = [...people, 'newguy $_counter'];
     });
   }
 
@@ -181,10 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            Text(
-              name,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            PeopleView(people),
           ],
         ),
       ),
@@ -193,6 +212,97 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.subtitles),
       ),
+    );
+  }
+}
+
+class PeopleView extends StatelessWidget {
+  const PeopleView(this.people, {super.key});
+
+  final List<String> people;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      // children: [
+      //   for (final person in people)
+      //     PersonView(person: person),
+      // ],
+      // ^ the same as below v
+      children: people.map((person) =>
+          PersonView(person: person)).toList(),
+    );
+  }
+}
+
+
+class PersonView extends StatefulWidget {
+  const PersonView({
+    required this.person,
+  });
+
+  final String person;
+
+  @override
+  State<PersonView> createState() => _PersonViewState();
+}
+
+class _PersonViewState extends State<PersonView> {
+  int grade = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          widget.person,
+          style: TextStyle(color: Colors.red),
+        ),
+        Spacer(),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              grade++;
+            });
+          },
+          icon: Icon(Icons.plus_one),
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              grade--;
+            });
+          },
+          icon: Icon(Icons.exposure_minus_1),
+        ),
+        GradeView(grade: grade),
+      ],
+    );
+  }
+}
+
+class GradeView extends StatefulWidget {
+  const GradeView({
+    super.key,
+    required this.grade,
+  });
+
+  final int grade;
+
+  @override
+  State<GradeView> createState() => _GradeViewState();
+}
+
+class _GradeViewState extends State<GradeView> {
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        setState(() {
+          print('${widget.grade}');
+        });
+      },
+      child: Text('${widget.grade}'),
     );
   }
 }
