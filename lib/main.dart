@@ -103,17 +103,15 @@ class MyAppInClass extends StatelessWidget {
       title: 'Flutter Demo',
       home: const MyHomePage(
         title: 'Flutter Demo Home Page',
-        people: ['ali', 'veli', 'ahmet'],
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.people});
+  const MyHomePage({super.key, required this.title});
 
   final String title;
-  final List<String> people;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -121,13 +119,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  late List<String> people;
+  List<String> people = ['ali', 'veli', 'ahmet'];
+  List<int> grades = [10, 80, 70];
 
-  @override
-  void initState() {
-    super.initState();
-    people = widget.people;
-  }
   void _incrementCounter() {
     void printSomething() {
       print('something');
@@ -143,6 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print('other stuff');
     setState(() {
       people = [...people, 'newguy $_counter'];
+      grades = [...grades, 50];
     });
   }
 
@@ -193,18 +188,42 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'PUSH PUSH PUSH oaueuaeo',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            PeopleView(people),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            // mainAxisAlignment: MainAxisAlignment.end,
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                height: 50,
+                child: const Text(
+                  'PUSH PUSH PUSH oaueuaeo',
+                ),
+              ),
+              SizedBox.square(dimension: 16),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              ColoredBox(
+                color: Colors.blue,
+                child: PeopleView(people, grades, (i, newGrade) {
+                  setState(() {
+                    grades[i] = newGrade;
+                  });
+                },),
+              ),
+              for (int i = 0; i < 10; ++i)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'HELLO',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                ),
+              Text('THE FOOTER'),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -217,61 +236,77 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class PeopleView extends StatelessWidget {
-  const PeopleView(this.people, {super.key});
+  const PeopleView(this.people, this.grades, this.onGradeChanged, {super.key});
 
   final List<String> people;
+  final List<int> grades;
+  final void Function(int i, int newGrade) onGradeChanged;
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < people.length; ++i)
+          PersonView(
+            person: people[i],
+            grade: grades[i],
+            onGradeChanged: (int newGrade) {
+              // grades[i] = newGrade;
+              onGradeChanged(i, newGrade);
+            },
+          ),
+      ],
       // children: [
       //   for (final person in people)
       //     PersonView(person: person),
       // ],
       // ^ the same as below v
-      children: people.map((person) =>
-          PersonView(person: person)).toList(),
+      // children: people.map((person) =>
+      //     PersonView(person: person)).toList(),
     );
   }
+
 }
 
 
-class PersonView extends StatefulWidget {
+class PersonView extends StatelessWidget {
   const PersonView({
-    required this.person,
+    required this.person, required this.grade, required this.onGradeChanged,
   });
 
   final String person;
-
-  @override
-  State<PersonView> createState() => _PersonViewState();
-}
-
-class _PersonViewState extends State<PersonView> {
-  int grade = 0;
+  final int grade;
+  final void Function(int newGrade) onGradeChanged;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          widget.person,
-          style: TextStyle(color: Colors.red),
+        Expanded(
+          child: Text(
+            person * 10,
+            style: TextStyle(color: Colors.red),
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-        Spacer(),
         IconButton(
           onPressed: () {
-            setState(() {
-              grade++;
-            });
+            onGradeChanged(grade + 1);
+            // setState(() {
+            //   grade++;
+            // });
           },
           icon: Icon(Icons.plus_one),
         ),
         IconButton(
           onPressed: () {
-            setState(() {
-              grade--;
-            });
+            onGradeChanged(grade - 1);
+            // setState(() {
+            //   grade--;
+            // });
           },
           icon: Icon(Icons.exposure_minus_1),
         ),
