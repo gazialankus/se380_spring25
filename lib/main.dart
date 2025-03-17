@@ -10,8 +10,6 @@ void main() {
   final s = {1, 2, 3, 1};
   print(s);
 
-
-
   f(
     8,
     j: 5,
@@ -25,8 +23,7 @@ void main() {
   final List<num> l = [
     1,
     if (isIncluded) ...lsub else ...[4, 5],
-    for (int i = 0; i < 5; ++i)
-      i,
+    for (int i = 0; i < 5; ++i) i,
     2,
     3,
     if (isIncluded) 4.8 else ...[0, 5],
@@ -39,9 +36,9 @@ void main() {
     print(l[i]);
   }
   //(i) {return '$i';}
-  final lo = l.map((i) => i*2).toList();
+  final lo = l.map((i) => i * 2).toList();
 
-  final lo1 = l.where((i) => i % 2 == 0).map((e) => e*2);
+  final lo1 = l.where((i) => i % 2 == 0).map((e) => e * 2);
 
   print(l);
   print('l after where:');
@@ -72,6 +69,7 @@ class Person {
   int? age;
 
   Person({required this.name});
+
   Person.withAge(int age, {required this.name});
 
   factory Person.olderBy10Than(Person other, int byHowMuch) {
@@ -79,8 +77,8 @@ class Person {
     return Person.withAge(newAge, name: other.name);
   }
 
-  // same as the following:
-  // Person(String name) : this.name = name;
+// same as the following:
+// Person(String name) : this.name = name;
 }
 
 class Employee extends Person {
@@ -101,8 +99,134 @@ class MyAppInClass extends StatelessWidget {
         useMaterial3: true,
       ),
       title: 'Flutter Demo',
-      home: const MyHomePage(
-        title: 'Flutter Demo Home Page',
+      home: MenuPage(),
+      // home: StackExampleWidget(),
+      // home: const MyHomePage(
+      //   title: 'Flutter Demo Home Page',
+      // ),
+    );
+  }
+}
+
+class MenuPage extends StatefulWidget {
+  const MenuPage({super.key});
+
+  @override
+  State<MenuPage> createState() => _MenuPageState();
+}
+
+class _MenuPageState extends State<MenuPage> {
+  var s = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Menu'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                // Navigator.push(
+                //     context,
+                final r = await Navigator.of(context).push<int>(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return MyHomePage(title: 'whatever');
+                    },
+                  ),
+                );
+                if (r != null) {
+                  print('popped with result: $r');
+                  setState(() {
+                    s = r;
+                  });
+                }
+                print('row and column');
+              },
+              child: Text('Row and column'),
+            ),
+            OutlinedButton(
+              onPressed: () {
+                setState(() {
+                  s++;
+                });
+                print('stack');
+              },
+              child: Text(
+                'Stack',
+                style: TextStyle(fontSize: 30),
+              ),
+            ),
+            Text(
+              '$s',
+              style: TextStyle(fontSize: 30),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class StackExampleWidget extends StatelessWidget {
+  const StackExampleWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Stack Example'),
+      ),
+      body: SizedBox(
+        width: 300,
+        height: 400,
+        child: Center(
+          child: ColoredBox(
+            color: Colors.yellow,
+            child: Stack(
+              fit: StackFit.passthrough,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: ColoredBox(
+                      color: Colors.red,
+                      child: SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: const Placeholder(),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 20,
+                  bottom: 20,
+                  child: ColoredBox(color: Colors.purple, child: Text('helloo')),
+                ),
+                ColoredBox(
+                  color: Colors.green,
+                  child: SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: Center(
+                      child: ColoredBox(
+                        color: Colors.red,
+                        child: SizedBox(width: 350, child: Text('Hello, I am on the stack')),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -155,81 +279,108 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     print('build is called');
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            print('pressed plus');
-            _incrementCounter();
-          },
-          icon: Text('add'),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-            onPressed: () {
-              print('pressed plus');
-              _incrementCounter();
-            },
-            icon: Icon(Icons.add),
-          ),
-          if (_counter >= 10) ...[
+    return PopScope(
+      canPop: _counter > 5,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) {
+          print('popped with result: $result');
+        } else {
+          final r = await showDialog<bool>(context: context, builder: (context) {
+            return AlertDialog(
+              title: Text('Sure?'),
+              content: Text('You will lose your progress'),
+              actions: [
+                TextButton(onPressed: () {
+                  Navigator.of(context).pop(true);
+                }, child: Text('Yes, go back')),
+                TextButton(onPressed: () {
+                  Navigator.of(context).pop(false);
+                }, child: Text('No, stay')),
+              ],
+            );
+          },);
+          if (r != null && r) {
+            Navigator.of(context).pop(_counter);
+          }
+          print('pop was not allowed');
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
+          actions: [
+            TextButton(onPressed: () {
+              Navigator.of(context).maybePop();
+            }, child: Text('GO BACK'),),
             IconButton(
               onPressed: () {
-                _counter = 0;
-                // setState(() {
-                // });
+                print('pressed plus');
+                _incrementCounter();
               },
-              icon: Icon(Icons.reset_tv),
+              icon: Icon(Icons.add),
             ),
-            Text('woo hold on reset now!')
-          ]
-        ],
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            // mainAxisAlignment: MainAxisAlignment.end,
-            // crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                height: 50,
-                child: const Text(
-                  'PUSH PUSH PUSH oaueuaeo',
-                ),
+            if (_counter >= 10) ...[
+              IconButton(
+                onPressed: () {
+                  _counter = 0;
+                  // setState(() {
+                  // });
+                },
+                icon: Icon(Icons.reset_tv),
               ),
-              SizedBox.square(dimension: 16),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              ColoredBox(
-                color: Colors.blue,
-                child: PeopleView(people, grades, (i, newGrade) {
-                  setState(() {
-                    grades[i] = newGrade;
-                  });
-                },),
-              ),
-              for (int i = 0; i < 10; ++i)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'HELLO',
-                    style: Theme.of(context).textTheme.headlineMedium,
+              Text('woo hold on reset now!')
+            ]
+          ],
+        ),
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              // mainAxisAlignment: MainAxisAlignment.end,
+              // crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  height: 50,
+                  child: const Text(
+                    'PUSH PUSH PUSH oaueuaeo',
                   ),
                 ),
-              Text('THE FOOTER'),
-            ],
+                SizedBox.square(dimension: 16),
+                Text(
+                  '$_counter',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                ColoredBox(
+                  color: Colors.grey.shade100,
+                  child: PeopleView(
+                    people,
+                    grades,
+                    (i, newGrade) {
+                      setState(() {
+                        grades[i] = newGrade;
+                      });
+                    },
+                  ),
+                ),
+                for (int i = 0; i < 10; ++i)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'HELLO',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  ),
+                Text('THE FOOTER'),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.subtitles),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _incrementCounter,
+          tooltip: 'Increment',
+          child: const Icon(Icons.subtitles),
+        ),
       ),
     );
   }
@@ -266,13 +417,13 @@ class PeopleView extends StatelessWidget {
       //     PersonView(person: person)).toList(),
     );
   }
-
 }
-
 
 class PersonView extends StatelessWidget {
   const PersonView({
-    required this.person, required this.grade, required this.onGradeChanged,
+    required this.person,
+    required this.grade,
+    required this.onGradeChanged,
   });
 
   final String person;
@@ -284,6 +435,15 @@ class PersonView extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            person * 10,
+            style: TextStyle(color: Colors.red),
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         Expanded(
           child: Text(
             person * 10,
