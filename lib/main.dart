@@ -1,6 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:se380spring25/clasroom_app.dart';
 
+class MyInt {
+  final int v;
+  const MyInt(this.v);
+}
+
+class Classroom {
+  Person? p;
+}
+
+// nice island!
+class SafeClassroom {
+  final Person p;
+  SafeClassroom(this.p);
+
+  void calculateGrade() {
+    p.name;
+  }
+}
 void main() {
+  final c = Classroom();
+
+  Person? p = c.p;
+
+  // don't use!
+  // Person nonnullP = p!;
+  // p!.name;
+
+  // don't overuse
+  // p?.name;
+
+  SafeClassroom? safeClassroom;
+  p;
+  // print(p.name);
+  // SafeClassroom(p);
+  if (p != null) { // type promotion!
+    // we swam back to the island!
+    print(p.name);
+
+    SafeClassroom(p);
+
+  }
+
+  if (p is Person) {
+    print(p.name);
+  }
+
+  if (safeClassroom != null) {
+    safeClassroom.calculateGrade();
+  }
+
+  print(p ?? Person(name: 'name'));
+
+  Person pe = Employee(name: 'name');
+
+  if (pe is Employee) {
+    print(pe.jobTitle);
+  }
+
+  // p ??= Person(name: 'name');
+  //
+  // print(p.name);
+
+
+  const i1 = MyInt(5);
+  const i2 = MyInt(5);
+
+  print(i1 == i2);
+
+
+
   final m = {
     'a': 1,
     'b': 2,
@@ -45,7 +115,7 @@ void main() {
   print(lo);
   print(lo1);
 
-  runApp(new MyAppInClass());
+  runApp(ClassroomApp());
 }
 
 void f(int count, {required int i, int? j, int k = 5, int? l}) {
@@ -116,6 +186,7 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
+  Person? p;
   var s = 0;
   @override
   Widget build(BuildContext context) {
