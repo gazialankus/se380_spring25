@@ -34,6 +34,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
           itemBuilder: (context, index) {
             return StudentListItem(
               studentId: value[index].id,
+              // TODO could use an InheritedWidget or InheritedNotifier to avoid passing students everywhere
               students: students,
             );
           },
