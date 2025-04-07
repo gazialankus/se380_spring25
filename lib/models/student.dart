@@ -4,6 +4,7 @@ class Student {
   final String lastName;
   final int age;
   final double grade;
+  final bool status;
 
   String get fullName {
     return '$firstName $lastName';
@@ -15,6 +16,7 @@ class Student {
     required this.lastName,
     required this.age,
     required this.grade,
+    required this.status,
   });
 
   Student copyWith({
@@ -22,6 +24,7 @@ class Student {
     String? lastName,
     int? age,
     double? grade,
+    bool? status,
   }) {
     return Student(
       id: id,
@@ -29,6 +32,7 @@ class Student {
       lastName: lastName ?? this.lastName,
       age: age ?? this.age,
       grade: grade ?? this.grade,
+      status: status ?? this.status,
     );
   }
 }

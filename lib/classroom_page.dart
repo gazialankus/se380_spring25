@@ -19,6 +19,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
         lastName: 'Lastname$index',
         age: 20 + index % 5,
         grade: 80 + index % 10,
+        status: false,
       ),
     ),
   ); //['Ali', 'Ayşe', 'Hasan'];
@@ -59,7 +60,7 @@ class StudentListItem extends StatelessWidget {
       valueListenable: students,
       builder: (context, value, child) => ListTile(
         title: Text('${value[studentId].firstName} ${value[studentId].lastName}'),
-        subtitle: Text('Age: ${value[studentId].age}'),
+        subtitle: Text('Age: ${value[studentId].age}, status ${value[studentId].status ? 'pass' : 'fail'}'),
         leading: CircleAvatar(child: Text(value[studentId].firstName[0])),
         trailing: Text('${value[studentId].grade}'),
         onTap: () {

@@ -54,9 +54,16 @@ class StudentViewPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Text('First name:'),
+                    Text('Grade:'),
                     Spacer(),
                     Text(value[studentId].grade.toString()),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text('Status:'),
+                    Spacer(),
+                    Text(value[studentId].status ? 'pass' : 'fail'),
                   ],
                 ),
               ],
