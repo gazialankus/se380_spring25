@@ -12,21 +12,16 @@ class ClassroomPage extends StatefulWidget {
 class _ClassroomPageState extends State<ClassroomPage> {
   final students = List.generate(
     1000,
-    (index) => Student(
-      id: index,
-      firstName: 'Firstname$index',
-      lastName: 'Lastname$index',
-      age: 20 + index % 5,
-      grade: 80 + index % 10,
+    (index) => ValueNotifier(
+      Student(
+        id: index,
+        firstName: 'Firstname$index',
+        lastName: 'Lastname$index',
+        age: 20 + index % 5,
+        grade: 80 + index % 10,
+      ),
     ),
   ); //['Ali', 'Ayşe', 'Hasan'];
-
-  void onChanged(Student student) {
-    setState(() {
-      final index = students.indexWhere((element) => element.id == student.id);
-      students[index] = student;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +32,6 @@ class _ClassroomPageState extends State<ClassroomPage> {
         itemBuilder: (context, index) {
           return StudentListItem(
             student: students[index],
-            onChanged: onChanged,
           );
         },
       ),
@@ -48,24 +42,38 @@ class _ClassroomPageState extends State<ClassroomPage> {
 class StudentListItem extends StatelessWidget {
   const StudentListItem({
     super.key,
-    required this.student, required this.onChanged,
+    required this.student,
   });
 
-  final Student student;
-  final void Function(Student student) onChanged;
+  final ValueNotifier<Student> student;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text('${student.firstName} ${student.lastName}'),
-      subtitle: Text('Age: ${student.age}'),
-      leading: CircleAvatar(child: Text(student.firstName[0])),
-      trailing: Text('${student.grade}'),
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return StudentViewPage(student: student, onChanged: onChanged);
-        },));
-      },
+    return ValueListenableBuilder(
+      valueListenable: student,
+      builder: (context, value, child) => ListTile(
+        title: Text('${student.value.firstName} ${student.value.lastName}'),
+        subtitle: Text('Age: ${student.value.age}'),
+        leading: CircleAvatar(child: Text(student.value.firstName[0])),
+        trailing: Text('${student.value.grade}'),
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) {
+              return StudentViewPage(student: student);
+            },
+          ));
+        },
+      ),
     );
   }
 }
+
+// TODAY
+// remind the current state of this app
+// - discuss that source of issue is imperative navigation
+// propose solutions
+// - pass around valueNotifiers
+// - pass around ids and single valueNotifier
+// form elements and state management
+// async/await
+// server data?
