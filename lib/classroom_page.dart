@@ -10,10 +10,10 @@ class ClassroomPage extends StatefulWidget {
 }
 
 class _ClassroomPageState extends State<ClassroomPage> {
-  final students = List.generate(
-    1000,
-    (index) => ValueNotifier(
-      Student(
+  final students = ValueNotifier(
+    List.generate(
+      1000,
+      (index) => Student(
         id: index,
         firstName: 'Firstname$index',
         lastName: 'Lastname$index',
@@ -25,15 +25,19 @@ class _ClassroomPageState extends State<ClassroomPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('The classroom')),
-      body: ListView.builder(
-        itemCount: students.length,
-        itemBuilder: (context, index) {
-          return StudentListItem(
-            student: students[index],
-          );
-        },
+    return ValueListenableBuilder(
+      valueListenable: students,
+      builder: (context, value, child) => Scaffold(
+        appBar: AppBar(title: Text('The classroom')),
+        body: ListView.builder(
+          itemCount: value.length,
+          itemBuilder: (context, index) {
+            return StudentListItem(
+              studentId: value[index].id,
+              students: students,
+            );
+          },
+        ),
       ),
     );
   }
@@ -42,24 +46,25 @@ class _ClassroomPageState extends State<ClassroomPage> {
 class StudentListItem extends StatelessWidget {
   const StudentListItem({
     super.key,
-    required this.student,
+    required this.studentId, required this.students,
   });
 
-  final ValueNotifier<Student> student;
+  final int studentId;
+  final ValueNotifier<List<Student>> students;
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: student,
+      valueListenable: students,
       builder: (context, value, child) => ListTile(
-        title: Text('${student.value.firstName} ${student.value.lastName}'),
-        subtitle: Text('Age: ${student.value.age}'),
-        leading: CircleAvatar(child: Text(student.value.firstName[0])),
-        trailing: Text('${student.value.grade}'),
+        title: Text('${value[studentId].firstName} ${value[studentId].lastName}'),
+        subtitle: Text('Age: ${value[studentId].age}'),
+        leading: CircleAvatar(child: Text(value[studentId].firstName[0])),
+        trailing: Text('${value[studentId].grade}'),
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) {
-              return StudentViewPage(student: student);
+              return StudentViewPage(students: students, studentId: studentId);
             },
           ));
         },

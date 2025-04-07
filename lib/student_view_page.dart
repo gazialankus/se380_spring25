@@ -3,23 +3,24 @@ import 'package:se380spring25/models/student.dart';
 import 'package:se380spring25/student_edit_page.dart';
 
 class StudentViewPage extends StatelessWidget {
-  const StudentViewPage({super.key, required this.student});
+  const StudentViewPage({super.key, required this.students, required this.studentId});
 
-  final ValueNotifier<Student> student;
+  final ValueNotifier<List<Student>> students;
+  final int studentId;
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: student,
+      valueListenable: students,
       builder: (context, value, child) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(value.fullName),
+            title: Text(value[studentId].fullName),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                    return StudentEditPage(student: student);
+                    return StudentEditPage(students: students, studentId: studentId);
                   },));
                 },
                 child: Text('Edit'),
@@ -34,28 +35,28 @@ class StudentViewPage extends StatelessWidget {
                   children: [
                     Text('First name:'),
                     Spacer(),
-                    Text(value.firstName),
+                    Text(value[studentId].firstName),
                   ],
                 ),
                 Row(
                   children: [
                     Text('Last name:'),
                     Spacer(),
-                    Text(value.lastName),
+                    Text(value[studentId].lastName),
                   ],
                 ),
                 Row(
                   children: [
                     Text('Age:'),
                     Spacer(),
-                    Text(value.age.toString()),
+                    Text(value[studentId].age.toString()),
                   ],
                 ),
                 Row(
                   children: [
                     Text('First name:'),
                     Spacer(),
-                    Text(value.grade.toString()),
+                    Text(value[studentId].grade.toString()),
                   ],
                 ),
               ],
