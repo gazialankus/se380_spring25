@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:se380spring25/clasroom_app.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 class MyInt {
   final int v;
@@ -21,7 +23,7 @@ class SafeClassroom {
     p.name;
   }
 }
-void main() {
+Future<void> main() async {
   final c = Classroom();
 
   Person? p = c.p;
@@ -116,6 +118,11 @@ void main() {
   print('l after where:');
   print(lo);
   print(lo1);
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(ClassroomApp());
 }

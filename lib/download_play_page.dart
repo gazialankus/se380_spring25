@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:se380spring25/models/student1.dart';
@@ -116,6 +117,20 @@ class _DownloadPlayPageState extends State<DownloadPlayPage> {
                   },
                   child: Text('Post'),
                 ),
+                Spacer(),
+                ElevatedButton(onPressed: () async {
+                  // /companies/Sd8nDupDvmUTNIfliL38
+
+                  final db = FirebaseFirestore.instance;
+                  final snap = await db.doc('/companies/Sd8nDupDvmUTNIfliL38').get();
+                  final data = snap.data();
+
+                  if (data != null) {
+                    print('name is:');
+                    print(data['name']);
+                  }
+
+                }, child: Text('Read from fb'),),
               ],
             ),
     );
