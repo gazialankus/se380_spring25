@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "191907012773",
+    "project_id": "se380-spring25",
+    "storage_bucket": "se380-spring25.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:191907012773:android:c27e4113ae94a7070fed4c",
+        "android_client_info": {
+          "package_name": "com.example.se380spring25"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "191907012773-pn402sal0qblrubtrduekpgmjt7dic92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBINeJsMPlPi7M13Z8P-mX2R9Oke-zwuv8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "191907012773-pn402sal0qblrubtrduekpgmjt7dic92.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "191907012773-dl34gg31mlpjiasj9emkbgn0019i4i1c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.se380spring25"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

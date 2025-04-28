@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:se380spring25/models/student1.dart';
 
+const baseUrl = 'https://6758210060576a194d0ef757.mockapi.io';
+
 // class Student1 {
 //   String id;
 //   String name;
@@ -93,7 +95,7 @@ class _DownloadPlayPageState extends State<DownloadPlayPage> {
                       );
 
                       var response = await dio.post(
-                        'https://6758210060576a194d0ef757.mockapi.io/students',
+                        '$baseUrl/students',
                         data: newStudent.toMap(),
                         options: Options(
                           headers: {
