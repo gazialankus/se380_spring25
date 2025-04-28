@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:se380spring25/models/student.dart';
 import 'package:se380spring25/student_view_page.dart';
 
+import 'download_play_page.dart';
+
 class ClassroomPage extends StatefulWidget {
   const ClassroomPage({super.key});
 
@@ -29,7 +31,16 @@ class _ClassroomPageState extends State<ClassroomPage> {
     return ValueListenableBuilder(
       valueListenable: students,
       builder: (context, value, child) => Scaffold(
-        appBar: AppBar(title: Text('The classroom')),
+        appBar: AppBar(
+          title: Text('The classroom'),
+          actions: [
+            TextButton(onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return DownloadPlayPage();
+              },));
+            }, child: Text('download'),),
+          ],
+        ),
         body: ListView.builder(
           itemCount: value.length,
           itemBuilder: (context, index) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:se380spring25/clasroom_app.dart';
 
@@ -201,19 +203,35 @@ class _MenuPageState extends State<MenuPage> {
           children: [
             ElevatedButton(
               onPressed: () async {
+
+                Completer c = Completer<int>();
+
+                // consumer does this
+                await c.future;
+
+                // producer does this
+                c.complete(1);
+
                 // Navigator.push(
                 //     context,
-                final r = await Navigator.of(context).push<int>(
+                // get the user's message
+                // ...
+                String msg = '';
+                // get the picture
+                final picturePath = await Navigator.of(context).push<int>(
                   MaterialPageRoute(
                     builder: (context) {
                       return MyHomePage(title: 'whatever');
                     },
                   ),
                 );
-                if (r != null) {
-                  print('popped with result: $r');
+
+                // sendMessage(msg, picturePath);
+
+                if (picturePath != null) {
+                  print('popped with result: $picturePath');
                   setState(() {
-                    s = r;
+                    s = picturePath;
                   });
                 }
                 print('row and column');
